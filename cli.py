@@ -102,7 +102,7 @@ def delete(site: str) -> None:
     """Delete the credential entry for SITE."""
     _require_init()
     click.confirm(f"Delete entry for '{site}'?", abort=True)
-    master = _authenticate()
+    _authenticate()
     removed = vault.delete_entry(site)
     if not removed:
         _abort(f"No entry found for '{site}'.")

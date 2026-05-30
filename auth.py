@@ -39,8 +39,8 @@ def verify_master_password(password: str) -> bool:
 def is_initialized() -> bool:
     _ensure_master_table()
     with get_connection() as conn:
-        return conn.execute("SELECT COUNT(*) FROM master").fetchone()[0] > 0
-
+        row = conn.execute("SELECT COUNT(*) FROM master").fetchone()
+    return bool(row and row[0])
 
 def prompt_master_password(prompt: str = "Master password: ") -> str:
     return getpass.getpass(prompt)
