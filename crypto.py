@@ -1,4 +1,5 @@
 import os
+from typing import cast
 
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
@@ -15,17 +16,17 @@ def derive_key(master_password: str, salt: bytes) -> bytes:
         salt=salt,
         iterations=_ITERATIONS,
     )
-    return kdf.derive(master_password.encode())
+    return cast(bytes, kdf.derive(master_password.encode()))
 
 
 def encrypt(plaintext: str, key: bytes) -> bytes:
     aesgcm = AESGCM(key)
     nonce = os.urandom(_NONCE_SIZE)
-    ciphertext = aesgcm.encrypt(nonce, plaintext.encode(), None)
+    ciphertext = cast(bytes, aesgcm.encrypt(nonce, plaintext.encode(), None))
     return nonce + ciphertext
 
 
 def decrypt(blob: bytes, key: bytes) -> str:
     aesgcm = AESGCM(key)
     nonce, ciphertext = blob[:_NONCE_SIZE], blob[_NONCE_SIZE:]
-    return aesgcm.decrypt(nonce, ciphertext, None).decode()
+    return cast(bytes, aesgcm.decrypt(nonce, ciphertext, None)).decode()
