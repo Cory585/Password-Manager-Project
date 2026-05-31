@@ -10,16 +10,19 @@ import vault
 
 
 def _abort(message: str) -> NoReturn:
+    """Print an error message to stderr and exit with code 1."""
     click.echo(f"Error: {message}", err=True)
     sys.exit(1)
 
 
 def _require_init() -> None:
+    """Abort with a helpful message if the vault has not been initialized yet."""
     if not auth.is_initialized():
         _abort("Vault not initialized. Run: python cli.py init")
 
 
 def _authenticate() -> str:
+    """Prompt for the master password and abort if verification fails; returns the password."""
     password = auth.prompt_master_password()
     if not auth.verify_master_password(password):
         _abort("Incorrect master password.")
