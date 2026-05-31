@@ -9,6 +9,7 @@ _ph = PasswordHasher()
 
 
 def _ensure_master_table() -> None:
+    """Create the master table if it doesn't already exist."""
     with get_connection() as conn:
         conn.execute(
             "CREATE TABLE IF NOT EXISTS master "
@@ -17,6 +18,7 @@ def _ensure_master_table() -> None:
 
 
 def create_master_password(password: str) -> None:
+    """Hash password with Argon2id and store the hash in the master table."""
     _ensure_master_table()
     hash_ = _ph.hash(password)
     with get_connection() as conn:
@@ -24,6 +26,7 @@ def create_master_password(password: str) -> None:
 
 
 def verify_master_password(password: str) -> bool:
+    """Return True if password matches the stored Argon2id hash, False otherwise."""
     _ensure_master_table()
     with get_connection() as conn:
         row = conn.execute("SELECT hash FROM master LIMIT 1").fetchone()
@@ -37,10 +40,12 @@ def verify_master_password(password: str) -> bool:
 
 
 def is_initialized() -> bool:
+    """Return True if a master password has already been set."""
     _ensure_master_table()
     with get_connection() as conn:
         row = conn.execute("SELECT COUNT(*) FROM master").fetchone()
     return bool(row and row[0])
 
 def prompt_master_password(prompt: str = "Master password: ") -> str:
+    """Prompt for a password without echoing it to the terminal."""
     return getpass.getpass(prompt)

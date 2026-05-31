@@ -1,6 +1,7 @@
 import secrets
 import string
 import sys
+from typing import NoReturn
 
 import click
 
@@ -8,7 +9,7 @@ import auth
 import vault
 
 
-def _abort(message: str) -> None:
+def _abort(message: str) -> NoReturn:
     click.echo(f"Error: {message}", err=True)
     sys.exit(1)
 
