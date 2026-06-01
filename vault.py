@@ -36,7 +36,7 @@ def add_entry(site: str, username: str, password: str, master_password: str) -> 
         )
 
 
-def get_entry(site: str, master_password: str) -> dict | None:
+def get_entry(site: str, master_password: str) -> dict[str, str] | None:
     _ensure_credentials_table()
     with get_connection() as conn:
         row = conn.execute(

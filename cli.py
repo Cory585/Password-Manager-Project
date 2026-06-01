@@ -61,7 +61,7 @@ def add(site: str, username: str, password: str | None) -> None:
     """Add a new credential entry."""
     _require_init()
     if password is None:
-        password = click.prompt("Password", hide_input=True, confirmation_prompt=True)
+        password = str(click.prompt("Password", hide_input=True, confirmation_prompt=True))
     master = _authenticate()
     try:
         vault.add_entry(site, username, password, master)
