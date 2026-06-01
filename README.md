@@ -60,7 +60,7 @@ python cli.py generate --no-symbols
 ### Encryption
 - **AES-256-GCM** (`AESGCM` from `cryptography.hazmat.primitives.ciphers.aead`).
 - Each encryption call generates a fresh **12-byte nonce**. The nonce is prepended to the ciphertext blob stored in SQLite.
-- GCM's authentication tag (16 bytes, appended by the library) ensures both confidentiality and integrity — any tampering with the ciphertext is detected on decryption.
+- GCM's authentication tag (16 bytes, appended by the library) ensures both confidentiality and integrity. Any tampering with the ciphertext is detected on decryption.
 
 ### What is stored in `vault.db`
 | Column | Contents |

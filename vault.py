@@ -6,6 +6,7 @@ from crypto import derive_key, encrypt, decrypt
 
 
 def _ensure_credentials_table() -> None:
+    """Create the credentials table if it doesn't already exist."""
     with get_connection() as conn:
         conn.execute(
             """
@@ -22,6 +23,7 @@ def _ensure_credentials_table() -> None:
 
 
 def add_entry(site: str, username: str, password: str, master_password: str) -> None:
+    """Encrypt username and password with a fresh per-entry key and store them in the vault."""
     _ensure_credentials_table()
     salt = os.urandom(16)
     key = derive_key(master_password, salt)
@@ -37,6 +39,7 @@ def add_entry(site: str, username: str, password: str, master_password: str) -> 
 
 
 def get_entry(site: str, master_password: str) -> dict[str, str] | None:
+    """Retrieve and decrypt credentials for site; returns None if the site is not found."""
     _ensure_credentials_table()
     with get_connection() as conn:
         row = conn.execute(
@@ -54,6 +57,7 @@ def get_entry(site: str, master_password: str) -> dict[str, str] | None:
 
 
 def list_sites() -> list[str]:
+    """Return all stored site names in alphabetical order without decrypting any credentials."""
     _ensure_credentials_table()
     with get_connection() as conn:
         rows = conn.execute(
@@ -63,6 +67,7 @@ def list_sites() -> list[str]:
 
 
 def delete_entry(site: str) -> bool:
+    """Delete the credential entry for site; returns True if a row was removed, False if not found."""
     _ensure_credentials_table()
     with get_connection() as conn:
         cursor = conn.execute(
