@@ -1,6 +1,6 @@
 # Password Manager
 
-A CLI password manager in Python using AES-256-GCM encryption and Argon2id password hashing.
+A CLI password manager in Python using AES-256-GCM encryption and Argon2id password hashing. It stores your credentials locally in an encrypted SQLite vault, protected by a single master password, so your site logins never touch disk in plaintext.
 
 ## Setup
 
